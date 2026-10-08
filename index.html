@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <title>MTG Battle – Pascal vs. Jonny</title>
+
+  <meta name="theme-color" content="#090b10">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background:
+        radial-gradient(circle at top, #202636 0%, #0d1017 38%, #07090d 100%);
+      color: #f4f6fb;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .container {
+      width: min(1100px, calc(100% - 24px));
+      margin: 0 auto;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    header {
+      padding: 28px 0 20px;
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      color: #9da6b8;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* =========================
+       BUTTONS
+    ========================= */
+
+    .main-button {
+      width: 100%;
+      border: 0;
+      border-radius: 18px;
+      padding: 17px 20px;
+      margin: 8px 0 20px;
+
+      color: white;
+      font-weight: 900;
+      font-size: 16px;
+      letter-spacing: .3px;
+
+      background:
+        linear-gradient(135deg, #7148ff, #a044ff);
+
+      box-shadow:
+        0 10px 30px rgba(122, 67, 255, .28);
+
+      transition:
+        transform .15s ease,
+        filter .15s ease;
+    }
+
+    .main-button:active {
+      transform: scale(.98);
+      filter: brightness(.9);
+    }
+
+    .secondary-button {
+      border: 1px solid #303746;
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: #dfe4ee;
+      background: #151923;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .secondary-button:active {
+      transform: scale(.97);
+    }
+
+    .danger-button {
+      color: #ffb1b1;
+      border-color: rgba(255, 92, 92, .25);
+    }
+
+    /* =========================
+       MATCH
+    ========================= */
+
+    .section {
+      margin-bottom: 26px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -.3px;
+    }
+
+    .match-area {
+      display: grid;
+      grid-template-columns: 1fr 54px 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .player-card {
+      position: relative;
+      min-width: 0;
+      overflow: hidden;
+
+      border: 1px solid #2b3140;
+      border-radius: 18px;
+
+      background:
+        linear-gradient(180deg, #181d28, #10131b);
+
+      box-shadow:
+        0 10px 30px rgba(0,0,0,.25);
+    }
+
+    .player-header {
+      padding: 10px 11px 7px;
+    }
+
+    .player-name {
+      font-size: 12px;
+      font-weight: 900;
+      color: #b9c1d0;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+    }
+
+    .commander-image-wrap {
+      width: 100%;
+      aspect-ratio: 5 / 7;
+      background: #0b0d12;
+      overflow: hidden;
+    }
+
+    .commander-image {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .commander-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 15px;
+      color: #697387;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .player-info {
+      padding: 10px 11px 12px;
+    }
+
+    .deck-name {
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .commander-name {
+      color: #8f99ab;
+      font-size: 11px;
+      line-height: 1.3;
+      min-height: 28px;
+    }
+
+    .mana-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 3px;
+      margin-top: 7px;
+    }
+
+    .mana-icon {
+      width: 17px;
+      height: 17px;
+      display: block;
+    }
+
+    .vs {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: #090b10;
+      border: 2px solid #343b4b;
+
+      color: #fff;
+      font-size: 14px;
+      font-weight: 1000;
+
+      box-shadow:
+        0 0 25px rgba(0,0,0,.4);
+    }
+
+    /* =========================
+       HISTORY / STATS
+    ========================= */
+
+    .panel {
+      border: 1px solid #282f3d;
+      border-radius: 18px;
+      background:
+        linear-gradient(180deg, rgba(24,29,40,.95), rgba(13,16,23,.95));
+      box-shadow: 0 12px 30px rgba(0,0,0,.2);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 15px;
+      border-bottom: 1px solid #252b37;
+    }
+
+    .panel-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .panel-header h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .panel-header p {
+      margin: 5px 0 0;
+      color: #7f899b;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 12px;
+    }
+
+    .stat-card {
+      border: 1px solid #292f3c;
+      border-radius: 14px;
+      background: #11151d;
+      padding: 12px 8px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 21px;
+      font-weight: 950;
+    }
+
+    .stat-label {
+      color: #7e8798;
+      font-size: 10px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .add-match {
+      padding: 12px;
+      border-top: 1px solid #252b37;
+      background: rgba(9, 11, 16, .35);
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 5px;
+      color: #929cad;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    select,
+    input {
+      width: 100%;
+      border: 1px solid #303746;
+      border-radius: 12px;
+      background: #0d1118;
+      color: #f4f6fb;
+      padding: 12px;
+      outline: none;
+    }
+
+    select:focus,
+    input:focus {
+      border-color: #7650ff;
+    }
+
+    .form-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .save-button {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px;
+      color: white;
+      background: linear-gradient(135deg, #6143ff, #9742ff);
+      font-weight: 900;
+    }
+
+    .history-list {
+      padding: 0 12px 12px;
+    }
+
+    .empty-history {
+      padding: 22px 10px 25px;
+      text-align: center;
+      color: #697386;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .history-item {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 8px;
+      align-items: center;
+
+      padding: 12px 8px;
+      border-top: 1px solid #252b37;
+    }
+
+    .history-side {
+      min-width: 0;
+    }
+
+    .history-side.right {
+      text-align: right;
+    }
+
+    .history-player {
+      color: #7e899b;
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .history-deck {
+      margin-top: 3px;
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .history-result {
+      min-width: 58px;
+      text-align: center;
+    }
+
+    .winner-badge {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 5px 7px;
+      background: rgba(98, 67, 255, .14);
+      border: 1px solid rgba(117, 80, 255, .28);
+      color: #c7baff;
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .history-date {
+      color: #596273;
+      font-size: 9px;
+      margin-top: 4px;
+    }
+
+    .delete-match {
+      position: absolute;
+      right: 0;
+      top: 5px;
+
+      width: 24px;
+      height: 24px;
+      border: 0;
+      border-radius: 50%;
+
+      color: #6e7788;
+      background: transparent;
+      font-size: 14px;
+    }
+
+    .delete-match:active {
+      background: #252a34;
+    }
+
+    /* =========================
+       DECK STATISTICS
+    ========================= */
+
+    .deck-stats-list {
+      padding: 0 12px 12px;
+    }
+
+    .deck-stat-item {
+      border-top: 1px solid #252b37;
+      padding: 12px 0;
+    }
+
+    .deck-stat-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .deck-stat-name {
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.25;
+    }
+
+    .deck-stat-owner {
+      color: #727c8e;
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    .deck-stat-percent {
+      font-size: 18px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .progress-track {
+      height: 7px;
+      margin-top: 8px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #0a0d12;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #6143ff, #a144ff);
+      transition: width .35s ease;
+    }
+
+    .deck-stat-details {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 6px;
+      color: #697385;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    /* =========================
+       DECK LIST
+    ========================= */
+
+    .search-box {
+      margin-bottom: 10px;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 7px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: none;
+    }
+
+    .filter-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-button {
+      flex: 0 0 auto;
+      border: 1px solid #303746;
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: #8f99ab;
+      background: #11151d;
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .filter-button.active {
+      color: white;
+      border-color: #7450ff;
+      background: rgba(111, 76, 255, .15);
+    }
+
+    .deck-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .deck-card {
+      display: grid;
+      grid-template-columns: 58px 1fr auto;
+      gap: 10px;
+      align-items: center;
+
+      min-height: 82px;
+      padding: 9px;
+
+      border: 1px solid #292f3c;
+      border-radius: 15px;
+
+      background:
+        linear-gradient(180deg, #161b24, #10131a);
+    }
+
+    .deck-card-image {
+      width: 58px;
+      height: 76px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #090b0f;
+    }
+
+    .deck-card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .deck-card-info {
+      min-width: 0;
+    }
+
+    .deck-owner {
+      color: #737e90;
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 3px;
+    }
+
+    .deck-card-title {
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.25;
+    }
+
+    .deck-card-commander {
+      color: #7f899a;
+      font-size: 10px;
+      line-height: 1.3;
+      margin-top: 3px;
+    }
+
+    .deck-card-mana {
+      align-self: center;
+      justify-content: flex-end;
+    }
+
+    .no-results {
+      padding: 25px;
+      text-align: center;
+      color: #687285;
+      border: 1px dashed #303746;
+      border-radius: 15px;
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+      padding: 30px 0 45px;
+      text-align: center;
+      color: #4e5768;
+      font-size: 10px;
+    }
+
+    /* =========================
+       DESKTOP
+    ========================= */
+
+    @media (min-width: 700px) {
+      .container {
+        width: min(1000px, calc(100% - 40px));
+      }
+
+      header {
+        padding-top: 42px;
+      }
+
+      .logo {
+        font-size: 42px;
+      }
+
+      .match-area {
+        grid-template-columns: 1fr 70px 1fr;
+        gap: 16px;
+      }
+
+      .vs {
+        width: 70px;
+        height: 70px;
+        font-size: 17px;
+      }
+
+      .commander-image-wrap {
+        aspect-ratio: 63 / 88;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+
+      .form-actions {
+        grid-template-columns: 1fr auto;
+      }
+
+      .deck-list {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- HEADER -->
+    <header>
+      <div class="logo">⚔️ MTG Battle</div>
+      <div class="subtitle">Pascal vs. Jonny</div>
+    </header>
+
+    <!-- NEW MATCH -->
+    <button
+      class="main-button"
+      id="newMatchButton"
+      onclick="createMatch()">
+      🎲 MATCH ERSTELLEN
+    </button>
+
+    <!-- CURRENT MATCH -->
+    <section class="section" id="matchSection">
+
+      <div class="section-title">
+        <h2>⚔️ Aktuelles Match</h2>
+      </div>
+
+      <div class="match-area">
+
+        <!-- PASCAL -->
+        <div class="player-card">
+
+          <div class="player-header">
+            <div class="player-name">Pascal</div>
+          </div>
+
+          <div class="commander-image-wrap">
+            <img
+              id="pascalImage"
+              class="commander-image"
+              src=""
+              alt="Pascal Commander"
+              style="display:none;">
+            <div
+              id="pascalPlaceholder"
+              class="commander-placeholder">
+              Match erstellen
+            </div>
+          </div>
+
+          <div class="player-info">
+            <div
+              id="pascalDeck"
+              class="deck-name">
+              —
+            </div>
+
+            <div
+              id="pascalCommander"
+              class="commander-name">
+              —
+            </div>
+
+            <div
+              id="pascalMana"
+              class="mana-row">
+            </div>
+          </div>
+
+        </div>
+
+        <!-- VS -->
+        <div class="vs">
+          VS
+        </div>
+
+        <!-- JONNY -->
+        <div class="player-card">
+
+          <div class="player-header">
+            <div class="player-name">Jonny</div>
+          </div>
+
+          <div class="commander-image-wrap">
+            <img
+              id="jonnyImage"
+              class="commander-image"
+              src=""
+              alt="Jonny Commander"
+              style="display:none;">
+            <div
+              id="jonnyPlaceholder"
+              class="commander-placeholder">
+              Match erstellen
+            </div>
+          </div>
+
+          <div class="player-info">
+            <div
+              id="jonnyDeck"
+              class="deck-name">
+              —
+            </div>
+
+            <div
+              id="jonnyCommander"
+              class="commander-name">
+              —
+            </div>
+
+            <div
+              id="jonnyMana"
+              class="mana-row">
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- MATCH HISTORY -->
+    <section class="section">
+
+      <div class="panel">
+
+        <div class="panel-header">
+
+          <div class="panel-header-row">
+            <h2>📜 Match-Verlauf</h2>
+
+            <button
+              class="secondary-button danger-button"
+              onclick="clearHistory()">
+              Verlauf löschen
+            </button>
+          </div>
+
+          <p>
+            Hier kannst du jedes gespielte Match mit Sieger eintragen.
+          </p>
+
+        </div>
+
+        <!-- OVERALL STATS -->
+        <div class="stats-grid">
+
+          <div class="stat-card">
+            <div
+              id="pascalWins"
+              class="stat-value">
+              0
+            </div>
+
+            <div class="stat-label">
+              Pascal Siege
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div
+              id="jonnyWins"
+              class="stat-value">
+              0
+            </div>
+
+            <div class="stat-label">
+              Jonny Siege
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div
+              id="totalGames"
+              class="stat-value">
+              0
+            </div>
+
+            <div class="stat-label">
+              Spiele
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ADD MATCH -->
+        <div class="add-match">
+
+          <div class="section-title">
+            <h2>➕ Spiel eintragen</h2>
+          </div>
+
+          <div class="form-grid">
+
+            <div class="field">
+              <label for="historyPascalDeck">
+                Pascals Deck
+              </label>
+
+              <select id="historyPascalDeck">
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="historyJonnyDeck">
+                Jonnys Deck
+              </label>
+
+              <select id="historyJonnyDeck">
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="historyWinner">
+                Sieger
+              </label>
+
+              <select id="historyWinner">
+                <option value="Pascal">
+                  🏆 Pascal
+                </option>
+
+                <option value="Jonny">
+                  🏆 Jonny
+                </option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="form-actions">
+
+            <button
+              class="save-button"
+              onclick="saveMatch()">
+              💾 Spiel speichern
+            </button>
+
+            <button
+              class="secondary-button"
+              onclick="useCurrentMatch()">
+              Aktuelles Match übernehmen
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- HISTORY LIST -->
+        <div
+          id="historyList"
+          class="history-list">
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- DECK WINRATES -->
+    <section class="section">
+
+      <div class="panel">
+
+        <div class="panel-header">
+
+          <h2>📊 Deck-Siegquoten</h2>
+
+          <p>
+            Wie oft wurde jedes Deck gespielt und wie häufig hat es gewonnen?
+          </p>
+
+        </div>
+
+        <div
+          id="deckStatsList"
+          class="deck-stats-list">
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ALL DECKS -->
+    <section class="section">
+
+      <div class="section-title">
+        <h2>🃏 Alle Decks</h2>
+      </div>
+
+      <div class="search-box">
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="🔎 Deck oder Commander suchen..."
+          autocomplete="off">
+
+      </div>
+
+      <div class="filter-row">
+
+        <button
+          class="filter-button active"
+          data-filter="Alle"
+          onclick="setFilter('Alle')">
+          Alle
+        </button>
+
+        <button
+          class="filter-button"
+          data-filter="Pascal"
+          onclick="setFilter('Pascal')">
+          Pascal
+        </button>
+
+        <button
+          class="filter-button"
+          data-filter="Jonny"
+          onclick="setFilter('Jonny')">
+          Jonny
+        </button>
+
+      </div>
+
+      <div
+        id="deckList"
+        class="deck-list">
+      </div>
+
+    </section>
+
+    <footer>
+      ⚔️ MTG Battle · Pascal vs. Jonny
+    </footer>
+
+  </div>
+
+<script>
+
+  /* =====================================================
+     DECKS
+  ===================================================== */
+
+  const decks = [
+
+    /* PASCAL */
+
+    {
+      owner: "Pascal",
+      name: "Lathril, Blade of Elves",
+      commander: "Lathril, Blade of Elves",
+      lookup: "Lathril, Blade of the Elves"
+    },
+
+    {
+      owner: "Pascal",
+      name: "Killian, decisive Mentor",
+      commander: "Killian, decisive Mentor",
+      lookup: "Killian, Ink Duelist"
+    },
+
+    {
+      owner: "Pascal",
+      name: "Dina, Essence Brewer",
+      commander: "Dina, Essence Brewer",
+      lookup: "Dina, Soul Steeper"
+    },
+
+    {
+      owner: "Pascal",
+      name: "Rootha, Mastering the Moment",
+      commander: "Rootha, Mastering the Moment",
+      lookup: "Rootha, Mercurial Artist"
+    },
+
+    {
+      owner: "Pascal",
+      name: "Y'shtola, Night's Blessed",
+      commander: "Y'shtola, Night's Blessed",
+      lookup: "Y'shtola, Night's Blessed"
+    },
+
+    {
+      owner: "Pascal",
+      name: "Celes, Rune Knight",
+      commander: "Celes, Rune Knight",
+      lookup: "Celes, Rune Knight"
+    },
+
+    /* JONNY */
+
+    {
+      owner: "Jonny",
+      name: "Nelly Borca, Impulsive Accuser",
+      commander: "Nelly Borca, Impulsive Accuser",
+      lookup: "Nelly Borca, Impulsive Accuser"
+    },
+
+    {
+      owner: "Jonny",
+      name: "Heroes in a Half-Shell",
+      commander: "Heroes in a Half-Shell",
+      lookup: "Heroes in a Half-Shell"
+    },
+
+    {
+      owner: "Jonny",
+      name: "Mog, Moogle Warrior",
+      commander: "Mog, Moogle Warrior",
+      lookup: "Mog, Moogle Warrior"
+    },
+
+    {
+      owner: "Jonny",
+      name: "Tifa Lockhart",
+      commander: "Tifa Lockhart",
+      lookup: "Tifa Lockhart"
+    },
+
+    {
+      owner: "Jonny",
+      name: "Sephiroth, Planet's Heir",
+      commander: "Sephiroth, Planet's Heir",
+      lookup: "Sephiroth, Planet's Heir"
+    },
+
+    {
+      owner: "Jonny",
+      name: "Ardbert, Warrior of Darkness",
+      commander: "Ardbert, Warrior of Darkness",
+      lookup: "Ardbert, Warrior of Darkness"
+    }
+
+  ];
+
+
+  /* =====================================================
+     VARIABLES
+  ===================================================== */
+
+  const HISTORY_KEY = "mtg_battle_history_v2";
+
+  let commanderCache = {};
+
+  let currentMatch = {
+    pascal: null,
+    jonny: null
+  };
+
+  let currentFilter = "Alle";
+
+
+  /* =====================================================
+     LOCAL STORAGE
+  ===================================================== */
+
+  function loadHistory() {
+
+    try {
+
+      const stored = localStorage.getItem(HISTORY_KEY);
+
+      if (!stored) {
+        return [];
+      }
+
+      const parsed = JSON.parse(stored);
+
+      return Array.isArray(parsed)
+        ? parsed
+        : [];
+
+    } catch (error) {
+
+      console.error("History konnte nicht geladen werden:", error);
+
+      return [];
+    }
+  }
+
+
+  function saveHistory(history) {
+
+    try {
+
+      localStorage.setItem(
+        HISTORY_KEY,
+        JSON.stringify(history)
+      );
+
+    } catch (error) {
+
+      console.error("History konnte nicht gespeichert werden:", error);
+    }
+  }
+
+
+  /* =====================================================
+     SCRYFALL
+  ===================================================== */
+
+  async function getCommanderData(name) {
+
+    const cacheKey = name;
+
+    if (commanderCache[cacheKey]) {
+      return commanderCache[cacheKey];
+    }
+
+    try {
+
+      let response = await fetch(
+        "https://api.scryfall.com/cards/named?exact=" +
+        encodeURIComponent(name),
+        {
+          headers: {
+            "Accept": "application/json"
+          }
+        }
+      );
+
+      if (!response.ok) {
+
+        response = await fetch(
+          "https://api.scryfall.com/cards/named?fuzzy=" +
+          encodeURIComponent(name),
+          {
+            headers: {
+              "Accept": "application/json"
+            }
+          }
+        );
+      }
+
+      if (!response.ok) {
+        throw new Error("Commander nicht gefunden");
+      }
+
+      const data = await response.json();
+
+      const result = {
+        image:
+          data.image_uris?.normal ||
+          data.card_faces?.[0]?.image_uris?.normal ||
+          "",
+
+        colors:
+          data.color_identity || [],
+
+        actualName:
+          data.name || name
+      };
+
+      commanderCache[cacheKey] = result;
+
+      return result;
+
+    } catch (error) {
+
+      console.warn(
+        "Scryfall konnte " + name + " nicht laden.",
+        error
+      );
+
+      const fallback = {
+        image: "",
+        colors: [],
+        actualName: name
+      };
+
+      commanderCache[cacheKey] = fallback;
+
+      return fallback;
+    }
+  }
+
+
+  /* =====================================================
+     MANA SYMBOLS
+  ===================================================== */
+
+  function manaIcons(colors) {
+
+    if (!colors || colors.length === 0) {
+      return "";
+    }
+
+    return colors
+      .map(color => {
+
+        return `
+          <img
+            class="mana-icon"
+            src="https://svgs.scryfall.io/card-symbols/${color}.svg"
+            alt="${color}">
+        `;
+
+      })
+      .join("");
+  }
+
+
+  /* =====================================================
+     CREATE MATCH
+  ===================================================== */
+
+  async function createMatch() {
+
+    const pascalDecks =
+      decks.filter(deck => deck.owner === "Pascal");
+
+    const jonnyDecks =
+      decks.filter(deck => deck.owner === "Jonny");
+
+    const pascal =
+      pascalDecks[
+        Math.floor(
+          Math.random() * pascalDecks.length
+        )
+      ];
+
+    const jonny =
+      jonnyDecks[
+        Math.floor(
+          Math.random() * jonnyDecks.length
+        )
+      ];
+
+    currentMatch = {
+      pascal,
+      jonny
+    };
+
+    showMatchLoading();
+
+    const [
+      pascalData,
+      jonnyData
+    ] = await Promise.all([
+      getCommanderData(pascal.lookup),
+      getCommanderData(jonny.lookup)
+    ]);
+
+    displayPlayer(
+      "pascal",
+      pascal,
+      pascalData
+    );
+
+    displayPlayer(
+      "jonny",
+      jonny,
+      jonnyData
+    );
+
+    useCurrentMatch();
+
+    document
+      .getElementById("matchSection")
+      .scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+  }
+
+
+  function showMatchLoading() {
+
+    document.getElementById("pascalPlaceholder").style.display = "flex";
+    document.getElementById("jonnyPlaceholder").style.display = "flex";
+
+    document.getElementById("pascalPlaceholder").textContent =
+      "⚔️ Wird ausgewählt...";
+
+    document.getElementById("jonnyPlaceholder").textContent =
+      "⚔️ Wird ausgewählt...";
+
+    document.getElementById("pascalImage").style.display = "none";
+    document.getElementById("jonnyImage").style.display = "none";
+  }
+
+
+  function displayPlayer(
+    prefix,
+    deck,
+    data
+  ) {
+
+    document.getElementById(
+      prefix + "Deck"
+    ).textContent = deck.name;
+
+    document.getElementById(
+      prefix + "Commander"
+    ).textContent = deck.commander;
+
+    document.getElementById(
+      prefix + "Mana"
+    ).innerHTML = manaIcons(data.colors);
+
+    const image =
+      document.getElementById(
+        prefix + "Image"
+      );
+
+    const placeholder =
+      document.getElementById(
+        prefix + "Placeholder"
+      );
+
+    if (data.image) {
+
+      image.src = data.image;
+      image.style.display = "block";
+
+      placeholder.style.display = "none";
+
+    } else {
+
+      image.style.display = "none";
+
+      placeholder.style.display = "flex";
+
+      placeholder.textContent =
+        "🃏 Bild nicht gefunden";
+    }
+  }
+
+
+  /* =====================================================
+     HISTORY FORM
+  ===================================================== */
+
+  function populateHistorySelects() {
+
+    const pascalSelect =
+      document.getElementById(
+        "historyPascalDeck"
+      );
+
+    const jonnySelect =
+      document.getElementById(
+        "historyJonnyDeck"
+      );
+
+    pascalSelect.innerHTML = "";
+    jonnySelect.innerHTML = "";
+
+    decks
+      .filter(deck => deck.owner === "Pascal")
+      .forEach(deck => {
+
+        const option =
+          document.createElement("option");
+
+        option.value = deck.name;
+        option.textContent = deck.name;
+
+        pascalSelect.appendChild(option);
+      });
+
+    decks
+      .filter(deck => deck.owner === "Jonny")
+      .forEach(deck => {
+
+        const option =
+          document.createElement("option");
+
+        option.value = deck.name;
+        option.textContent = deck.name;
+
+        jonnySelect.appendChild(option);
+      });
+  }
+
+
+  function useCurrentMatch() {
+
+    if (!currentMatch.pascal ||
+        !currentMatch.jonny) {
+
+      return;
+    }
+
+    document.getElementById(
+      "historyPascalDeck"
+    ).value = currentMatch.pascal.name;
+
+    document.getElementById(
+      "historyJonnyDeck"
+    ).value = currentMatch.jonny.name;
+  }
+
+
+  function saveMatch() {
+
+    const pascalDeck =
+      document.getElementById(
+        "historyPascalDeck"
+      ).value;
+
+    const jonnyDeck =
+      document.getElementById(
+        "historyJonnyDeck"
+      ).value;
+
+    const winner =
+      document.getElementById(
+        "historyWinner"
+      ).value;
+
+    if (!pascalDeck || !jonnyDeck || !winner) {
+      return;
+    }
+
+    const history = loadHistory();
+
+    history.push({
+
+      id:
+        Date.now().toString() +
+        Math.random().toString(36).slice(2),
+
+      date:
+        new Date().toISOString(),
+
+      pascalDeck,
+      jonnyDeck,
+      winner
+    });
+
+    saveHistory(history);
+
+    renderHistory();
+    renderDeckStats();
+
+    // Sieger-Auswahl wieder auf Pascal setzen
+    document.getElementById(
+      "historyWinner"
+    ).value = "Pascal";
+
+    // Zum Verlauf scrollen
+    document
+      .querySelector(".panel")
+      .scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+  }
+
+
+  /* =====================================================
+     RENDER HISTORY
+  ===================================================== */
+
+  function renderHistory() {
+
+    const history =
+      loadHistory().sort(
+        (a, b) =>
+          new Date(b.date) -
+          new Date(a.date)
+      );
+
+    const list =
+      document.getElementById(
+        "historyList"
+      );
+
+    const pascalWins =
+      history.filter(
+        game => game.winner === "Pascal"
+      ).length;
+
+    const jonnyWins =
+      history.filter(
+        game => game.winner === "Jonny"
+      ).length;
+
+    document.getElementById(
+      "pascalWins"
+    ).textContent = pascalWins;
+
+    document.getElementById(
+      "jonnyWins"
+    ).textContent = jonnyWins;
+
+    document.getElementById(
+      "totalGames"
+    ).textContent = history.length;
+
+
+    if (history.length === 0) {
+
+      list.innerHTML = `
+        <div class="empty-history">
+          Noch keine Spiele eingetragen.<br>
+          Trage oben euer erstes Match ein. ⚔️
+        </div>
+      `;
+
+      return;
+    }
+
+
+    list.innerHTML =
+      history
+        .map((game, index) => {
+
+          const date =
+            new Date(game.date)
+              .toLocaleDateString(
+                "de-DE",
+                {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric"
+                }
+              );
+
+          return `
+            <div class="history-item">
+
+              <div class="history-side">
+
+                <div class="history-player">
+                  Pascal
+                </div>
+
+                <div class="history-deck">
+                  ${escapeHtml(game.pascalDeck)}
+                </div>
+
+              </div>
+
+
+              <div class="history-result">
+
+                <div class="winner-badge">
+                  🏆 ${escapeHtml(game.winner)}
+                </div>
+
+                <div class="history-date">
+                  ${date}
+                </div>
+
+              </div>
+
+
+              <div class="history-side right">
+
+                <div class="history-player">
+                  Jonny
+                </div>
+
+                <div class="history-deck">
+                  ${escapeHtml(game.jonnyDeck)}
+                </div>
+
+              </div>
+
+
+              <button
+                class="delete-match"
+                title="Spiel löschen"
+                onclick="deleteMatch('${game.id}')">
+                ×
+              </button>
+
+            </div>
+          `;
+
+        })
+        .join("");
+  }
+
+
+  /* =====================================================
+     DELETE HISTORY ITEM
+  ===================================================== */
+
+  function deleteMatch(id) {
+
+    const history =
+      loadHistory();
+
+    const updated =
+      history.filter(
+        game => game.id !== id
+      );
+
+    saveHistory(updated);
+
+    renderHistory();
+    renderDeckStats();
+  }
+
+
+  /* =====================================================
+     CLEAR HISTORY
+  ===================================================== */
+
+  function clearHistory() {
+
+    const history =
+      loadHistory();
+
+    if (history.length === 0) {
+      return;
+    }
+
+    const confirmed =
+      confirm(
+        "Möchtest du wirklich den kompletten Match-Verlauf löschen?"
+      );
+
+    if (!confirmed) {
+      return;
+    }
+
+    localStorage.removeItem(
+      HISTORY_KEY
+    );
+
+    renderHistory();
+    renderDeckStats();
+  }
+
+
+  /* =====================================================
+     DECK WIN RATES
+  ===================================================== */
+
+  function renderDeckStats() {
+
+    const history =
+      loadHistory();
+
+    const stats =
+      decks.map(deck => {
+
+        const games =
+          history.filter(game =>
+            game.pascalDeck === deck.name ||
+            game.jonnyDeck === deck.name
+          );
+
+        const wins =
+          history.filter(game => {
+
+            if (game.winner === "Pascal") {
+
+              return (
+                game.pascalDeck === deck.name
+              );
+
+            }
+
+            if (game.winner === "Jonny") {
+
+              return (
+                game.jonnyDeck === deck.name
+              );
+
+            }
+
+            return false;
+
+          });
+
+        const gamesPlayed =
+          games.length;
+
+        const winsCount =
+          wins.length;
+
+        const winRate =
+          gamesPlayed > 0
+            ? (winsCount / gamesPlayed) * 100
+            : 0;
+
+        return {
+          ...deck,
+          gamesPlayed,
+          winsCount,
+          winRate
+        };
+
+      });
+
+
+    // Erst Decks mit Spielen,
+    // danach Decks ohne Spiele.
+    stats.sort((a, b) => {
+
+      if (
+        a.gamesPlayed > 0 &&
+        b.gamesPlayed === 0
+      ) {
+        return -1;
+      }
+
+      if (
+        a.gamesPlayed === 0 &&
+        b.gamesPlayed > 0
+      ) {
+        return 1;
+      }
+
+      if (
+        a.gamesPlayed > 0 &&
+        b.gamesPlayed > 0
+      ) {
+
+        if (
+          b.winRate !== a.winRate
+        ) {
+          return b.winRate - a.winRate;
+        }
+
+        return b.winsCount - a.winsCount;
+      }
+
+      return a.name.localeCompare(
+        b.name,
+        "de"
+      );
+    });
+
+
+    const container =
+      document.getElementById(
+        "deckStatsList"
+      );
+
+
+    container.innerHTML =
+      stats
+        .map(stat => {
+
+          const percentage =
+            stat.gamesPlayed > 0
+              ? stat.winRate.toFixed(1)
+              : "—";
+
+          const barWidth =
+            stat.gamesPlayed > 0
+              ? Math.min(
+                  100,
+                  stat.winRate
+                )
+              : 0;
+
+
+          return `
+            <div class="deck-stat-item">
+
+              <div class="deck-stat-top">
+
+                <div>
+
+                  <div class="deck-stat-name">
+                    ${escapeHtml(stat.name)}
+                  </div>
+
+                  <div class="deck-stat-owner">
+                    ${escapeHtml(stat.owner)}
+                  </div>
+
+                </div>
+
+                <div class="deck-stat-percent">
+                  ${percentage}${stat.gamesPlayed > 0 ? "%" : ""}
+                </div>
+
+              </div>
+
+
+              <div class="progress-track">
+
+                <div
+                  class="progress-bar"
+                  style="width:${barWidth}%">
+                </div>
+
+              </div>
+
+
+              <div class="deck-stat-details">
+
+                <span>
+                  ${stat.gamesPlayed} ${stat.gamesPlayed === 1 ? "Spiel" : "Spiele"}
+                </span>
+
+                <span>
+                  ${stat.winsCount} ${stat.winsCount === 1 ? "Sieg" : "Siege"}
+                </span>
+
+              </div>
+
+            </div>
+          `;
+
+        })
+        .join("");
+  }
+
+
+  /* =====================================================
+     DECK LIST
+  ===================================================== */
+
+  async function renderDecks() {
+
+    const search =
+      document.getElementById(
+        "searchInput"
+      ).value
+        .trim()
+        .toLowerCase();
+
+    const container =
+      document.getElementById(
+        "deckList"
+      );
+
+    const filtered =
+      decks.filter(deck => {
+
+        const matchesFilter =
+          currentFilter === "Alle" ||
+          deck.owner === currentFilter;
+
+        const matchesSearch =
+          deck.name
+            .toLowerCase()
+            .includes(search) ||
+
+          deck.commander
+            .toLowerCase()
+            .includes(search);
+
+        return (
+          matchesFilter &&
+          matchesSearch
+        );
+      });
+
+
+    if (filtered.length === 0) {
+
+      container.innerHTML = `
+        <div class="no-results">
+          Keine passenden Decks gefunden.
+        </div>
+      `;
+
+      return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    for (const deck of filtered) {
+
+      const data =
+        await getCommanderData(
+          deck.lookup
+        );
+
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "deck-card";
+
+
+      const imageHtml =
+        data.image
+
+          ? `
+            <img
+              src="${data.image}"
+              alt="${escapeHtml(deck.commander)}">
+          `
+
+          : `
+            <div
+              class="commander-placeholder">
+              🃏
+            </div>
+          `;
+
+
+      card.innerHTML = `
+
+        <div class="deck-card-image">
+          ${imageHtml}
+        </div>
+
+
+        <div class="deck-card-info">
+
+          <div class="deck-owner">
+            ${escapeHtml(deck.owner)}
+          </div>
+
+          <div class="deck-card-title">
+            ${escapeHtml(deck.name)}
+          </div>
+
+          <div class="deck-card-commander">
+            ${escapeHtml(deck.commander)}
+          </div>
+
+        </div>
+
+
+        <div class="mana-row deck-card-mana">
+          ${manaIcons(data.colors)}
+        </div>
+
+      `;
+
+
+      container.appendChild(card);
+    }
+  }
+
+
+  /* =====================================================
+     FILTER
+  ===================================================== */
+
+  function setFilter(filter) {
+
+    currentFilter = filter;
+
+    document
+      .querySelectorAll(".filter-button")
+      .forEach(button => {
+
+        button.classList.toggle(
+          "active",
+          button.dataset.filter === filter
+        );
+      });
+
+    renderDecks();
+  }
+
+
+  /* =====================================================
+     HTML ESCAPE
+  ===================================================== */
+
+  function escapeHtml(value) {
+
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+
+  /* =====================================================
+     SEARCH
+  ===================================================== */
+
+  document
+    .getElementById("searchInput")
+    .addEventListener(
+      "input",
+      () => renderDecks()
+    );
+
+
+  /* =====================================================
+     START
+  ===================================================== */
+
+  populateHistorySelects();
+
+  renderHistory();
+
+  renderDeckStats();
+
+  renderDecks();
+
+</script>
+
+</body>
+</html>
